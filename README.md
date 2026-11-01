@@ -6,4 +6,4 @@ Verzeichnis `bookmarklets/`.
 
 Seite: <https://nmutsanas.github.io/kzn-bookmarklets/>
 
-Stand: 2026-11-01 · Commit `abe6673`
+Stand: 2026-11-01 · Commit `834c398`
