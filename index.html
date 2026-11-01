@@ -18,6 +18,7 @@
     --accent-soft: #e8efff;
     --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 8px 24px rgba(16, 24, 40, .06);
     --radius: 14px;
+    --track-width: 2px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -51,26 +52,29 @@
   }
   .tagline { font-size: 1.0625rem; margin: 0 0 16px; }
   .note { color: var(--muted); margin: 0; }
+  .drag-hint { margin: 14px 0 0; color: var(--text); font-size: .9375rem; }
 
   /* --- Tabs (ein Tab pro Bookmarklet, ohne JavaScript) --- */
   .tabs { margin-top: 36px; }
   .tabs > input { position: absolute; opacity: 0; pointer-events: none; }
   .tablist {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 12px; margin-bottom: 20px;
+    display: flex; flex-wrap: wrap;
+    border-bottom: var(--track-width) solid var(--border);
+    margin-bottom: 24px;
   }
   .tablist label {
     cursor: pointer; user-select: none;
-    padding: 7px 14px; border-radius: 999px;
-    border: 1px solid var(--border); background: var(--surface);
-    font-size: .9375rem; font-weight: 600; color: var(--muted);
+    padding: 14px 20px;
+    margin-bottom: calc(-1 * var(--track-width));
+    border-bottom: var(--track-width) solid transparent;
+    font-size: .875rem; font-weight: 600; color: var(--muted);
+    white-space: nowrap;
   }
-  .tablist label:hover { color: var(--text); }
+  .tablist label:hover { color: var(--accent); }
   .panel { display: none; }
   .panel > * + * { margin-top: 24px; }
   #tab-intranet-noten-importierer:checked ~ .tablist label[for="tab-intranet-noten-importierer"] {
-    background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+    color: var(--accent); border-bottom-color: var(--accent);
   }
   #tab-intranet-noten-importierer:focus-visible ~ .tablist label[for="tab-intranet-noten-importierer"] {
     outline: 3px solid var(--accent); outline-offset: 3px;
@@ -81,10 +85,7 @@
     border-radius: var(--radius); box-shadow: var(--shadow);
     padding: 24px;
   }
-  .grab {
-    margin-top: 20px; display: flex; flex-wrap: wrap;
-    align-items: center; gap: 14px 18px;
-  }
+  .grab { margin-top: 20px; }
   a.bookmarklet {
     display: inline-flex; align-items: center; gap: 9px;
     background: var(--accent); color: var(--accent-ink);
@@ -96,7 +97,6 @@
   a.bookmarklet:active { cursor: grabbing; }
   a.bookmarklet:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
   a.bookmarklet svg { flex: none; }
-  .grab .hint { color: var(--muted); font-size: .9375rem; }
   .click-note {
     margin: 14px 0 0; padding: 11px 14px;
     background: var(--accent-soft); border-radius: 10px;
@@ -192,8 +192,7 @@
   <header>
     <h1>KZN Bookmarklets</h1>
     <p class="lede">
-      Kleine Helfer für wiederkehrende Arbeiten im Intranet: einmal in die
-      Lesezeichenleiste ziehen, danach auf der jeweiligen Seite anklicken.
+      Kleine Helfer für wiederkehrende Aufgaben im Schulalltag
     </p>
   </header>
 
@@ -205,18 +204,92 @@
     <section class="panel" data-for="tab-intranet-noten-importierer">
       <div class="card">
         <p class="tagline">Überträgt Nachname, Vorname und Note aus Excel direkt in das Notenbüchlein im Intranet.</p>
-        <p class="note">Diesen Button in die Lesezeichenleiste ziehen – nicht anklicken:</p>
         <div class="grab">
           <a class="bookmarklet" href="javascript:(function()%7B%22use%20strict%22%3Bfunction%20v()%7Bconst%20h%3D%24(%22%23gba-grid%22)%3Bif(h.length%3D%3D%3D0)%7Balert(%22Fehler%3A%20Die%20Notentabelle%20konnte%20auf%20dieser%20Seite%20nicht%20gefunden%20werden.%22)%3Breturn%7Dconst%20y%3Dh.data(%22kendoGrid%22)%3B%24(%22%23grade-importer-ui%22).remove()%3Bconst%20c%3D%24('%3Cdiv%20id%3D%22grade-importer-ui%22%3E%3C%2Fdiv%3E').css(%7Bposition%3A%22fixed%22%2Ctop%3A%2250px%22%2Cright%3A%2250px%22%2Cwidth%3A%22320px%22%2Cbackground%3A%22%23ffffff%22%2Cborder%3A%221px%20solid%20%23ccc%22%2C%22z-index%22%3A%2210000%22%2Cpadding%3A%2220px%22%2C%22border-radius%22%3A%228px%22%7D)%3Bc.append('%3Ch3%20style%3D%22margin-top%3A0%3B%20color%3A%23333%3B%22%3ENoten%20von%20Excel%20Importieren%3C%2Fh3%3E')%2Cc.append('%3Cp%20style%3D%22font-size%3A12px%3B%20color%3A%23666%3B%22%3E%3Cb%3EInstructions%3A%3C%2Fb%3E%3Cbr%3E1.%20Kopiere%203%20Spalten%20aus%20Excel%3Cbr%3E(Nachname%20%7C%20Vorname%20%7C%20Note)%3Cbr%3E2.%20Unten%20einf%C3%BCgen.%3C%2Fp%3E')%3Bconst%20b%3D%24('%3Ctextarea%20id%3D%22grade-paste-area%22%20placeholder%3D%22Excel-Daten%20hier%20einf%C3%BCgen...%22%3E%3C%2Ftextarea%3E').css(%7Bheight%3A%22150px%22%2C%22white-space%22%3A%22pre%22%7D)%3Bc.append(b)%3Bconst%20f%3D%24('%3Cselect%20id%3D%22grade-column-select%22%3E%3C%2Fselect%3E').css(%7Bwidth%3A%22100%25%22%2Cpadding%3A%228px%22%2C%22margin-bottom%22%3A%2215px%22%7D)%3Bf.append('%3Coption%20value%3D%22%22%20disabled%20selected%3E--%20Zielspalte%20w%C3%A4hlen%20--%3C%2Foption%3E')%2Ch.find(%22.k-grid-header-wrap%20th%5Bdata-field%5D%22).each(function()%7Bconst%20t%3D%24(this).attr(%22data-field%22)%2Cr%3D%24(this).attr(%22data-title%22)%7C%7C%24(this).text().trim()%3Bt%26%26t.indexOf(%22g_%22)%3D%3D%3D0%26%26f.append(%60%3Coption%20value%3D%22%24%7Bt%7D%22%3E%24%7Br%7D%3C%2Foption%3E%60)%7D)%2Cc.append('%3Clabel%20style%3D%22font-weight%3Abold%3B%20font-size%3A12px%3B%22%3EZielspalte%3A%3C%2Flabel%3E')%2Cc.append(f)%3Bconst%20x%3D%24(%22%3Cbutton%3EImport-Vorschau%3C%2Fbutton%3E%22).css(%7Bwidth%3A%22100%25%22%2Cbackground%3A%22%2328a745%22%2Ccolor%3A%22white%22%2C%22margin-bottom%22%3A%2210px%22%2C%22text-shadow%22%3A%22none%22%7D)%2Cw%3D%24(%22%3Cbutton%3ESchliessen%3C%2Fbutton%3E%22).css(%7Bwidth%3A%22100%25%22%2C%22margin-left%22%3A%220%22%7D)%3Bc.append(x).append(w)%2C%24(%22body%22).append(c)%2Cw.on(%22click%22%2C()%3D%3E%7B%24(%22%23grade-importer-ui%22).remove()%7D)%2Cx.on(%22click%22%2C()%3D%3E%7Bconst%20t%3Db.val()%2Cr%3Df.val()%3Bif(!t.trim())%7Balert(%22Das%20Textfeld%20ist%20leer.%22)%3Breturn%7Dif(!r)%7Balert(%22Bitte%20eine%20Zielspalte%20w%C3%A4hlen.%22)%3Breturn%7DC(y%2Ct%2Cr)%7D)%3Bconst%20C%3D(t%2Cr%2Cd)%3D%3E%7Bconst%20o%3Dr.split(%2F%5Cn%2F)%2Cs%3Dt.dataSource.data()%2Ca%3D%5B%5D%3Blet%20l%3D0%3Bif(o.forEach(n%3D%3E%7Bif(n%3Dn.trim()%2C!n)return%3Bn%3Dn.replaceAll(%2F%5Ct%7B2%2C%7D%2Fg%2C%22%09%22)%2Cn%3Dn.replaceAll(%2F%E1%B5%90%2Fg%2C%22%22)%3Blet%20e%3Dn.split(%2F%5Ct%2F)%3Bif(e.length%3C3%26%26(e%3Dn.split(%2F%2C%7C%3B%2F))%2Cconsole.log(%22Line%20%22%2Cn)%2Cconsole.log(%22Parts%22%2CJSON.stringify(e))%2Ce.length%3E%3D3)%7Bconst%20i%3De%5B0%5D.trim().toLowerCase()%2Cg%3De%5B1%5D.trim().toLowerCase()%2CN%3De%5B2%5D.trim()%2Cu%3Ds.find(p%3D%3E%7Bconst%20m%3D(p.studentGivenName%7C%7C%22%22).trim().toLowerCase()%2CE%3D(p.studentLastName%7C%7C%22%22).trim().toLowerCase()%3Breturn%20m%3D%3D%3Dg%26%26E%3D%3D%3Di%7D)%3Bif(u)%7Bconst%20p%3Du%5Bd%5D%2Cm%3Du%26%26typeof%20u%3D%3D%22object%22%26%26%22grade%22in%20u%3Fu.grade%3Ap%26%26typeof%20p%3D%3D%22object%22%26%26%22grade%22in%20p%3Fp.grade%3Ap%3Ba.push(%7Bstudent%3Au%2Cname%3A%60%24%7Be%5B1%5D.trim()%7D%20%24%7Be%5B0%5D.trim()%7D%60%2ColdValue%3Am%2CnewValue%3AN%2CtargetColumn%3Ad%7D)%7Delse%20l%2B%2B%7D%7D)%2Ca.length%3D%3D%3D0)%7Balert(%60Keine%20passenden%20Sch%C3%BCler%20gefunden.%0ANicht%20gefunden%3A%20%24%7Bl%7D%60)%3Breturn%7DV(t%2Ca%2Cl)%7D%2CV%3D(t%2Cr%2Cd)%3D%3E%7B%24(%22%23grade-confirm-ui%22).remove()%3Bconst%20o%3D%24('%3Cdiv%20id%3D%22grade-confirm-ui%22%3E%3C%2Fdiv%3E').css(%7Bposition%3A%22fixed%22%2Ctop%3A%2250px%22%2Cleft%3A%2250%25%22%2Ctransform%3A%22translateX(-50%25)%22%2Cwidth%3A%22400px%22%2C%22max-height%22%3A%2280vh%22%2Cbackground%3A%22%23ffffff%22%2Cborder%3A%222px%20solid%20limegreen%22%2C%22z-index%22%3A%2210001%22%2Cpadding%3A%2220px%22%2C%22border-radius%22%3A%228px%22%2C%22box-shadow%22%3A%220%200%2015px%20rgba(0%2C0%2C0%2C0.5)%22%2C%22overflow-y%22%3A%22auto%22%7D)%3Bo.append('%3Ch3%20style%3D%22margin-top%3A0%3Bmargin-bottom%3A4px%3B%22%3E%C3%84nderungen%20best%C3%A4tigen%3C%2Fh3%3E')%3Bconst%20s%3Dr.map(e%3D%3E%7Blet%20i%3D%60%3Cb%3E%24%7Be.newValue%7D%3C%2Fb%3E%60%3Breturn%20e.oldValue%26%26e.oldValue!%3De.newValue%26%26(i%3D%60%3Cspan%20style%3D%22color%3Ared%3B%20text-decoration%3Aline-through%22%3E%24%7Be.oldValue%7D%3C%2Fspan%3E%20%26rarr%3B%20%3Cspan%20style%3D%22color%3Agreen%3B%20font-weight%3Abold%22%3E%24%7Be.newValue%7D%3C%2Fspan%3E%60)%2C%60%3Cli%20style%3D%22margin-bottom%3A5px%3B%20border-bottom%3A1px%20solid%20%23eee%3B%20padding-bottom%3A2px%3B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%24%7Be.name%7D%3A%20%24%7Bi%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fli%3E%60%7D).join(%22%22)%3Bo.append(%60%3Cul%20style%3D%22list-style%3Anone%3B%20padding-left%3A0%3B%20font-size%3A13px%3B%22%3E%24%7Bs%7D%3C%2Ful%3E%60)%2Cd%3E0%26%26o.append(%60%3Cp%20style%3D%22color%3Ared%3B%20font-size%3A12px%3B%22%3EWarnung%3A%20%24%7Bd%7D%20Eintr%C3%A4ge%20wurden%20nicht%20gefunden.%3C%2Fp%3E%60)%3Bconst%20a%3D%24('%3Cdiv%20style%3D%22margin-top%3A15px%3B%20display%3Aflex%3B%20gap%3A10px%3B%22%3E%3C%2Fdiv%3E')%2Cl%3D%24(%22%3Cbutton%3EBest%C3%A4tigen%20%26%20Ausf%C3%BChren%3C%2Fbutton%3E%22).css(%7Bflex%3A1%2Cbackground%3A%22%2328a745%22%2Ccolor%3A%22white%22%2C%22text-shadow%22%3A%22none%22%7D)%2Cn%3D%24(%22%3Cbutton%3EAbbrechen%3C%2Fbutton%3E%22).css(%7Bflex%3A1%2Cbackground%3A%22%23dc3545%22%2Ccolor%3A%22white%22%2C%22text-shadow%22%3A%22none%22%7D)%3Ba.append(l).append(n)%2Co.append(a)%2C%24(%22body%22).append(o)%2Cn.on(%22click%22%2C()%3D%3E%24(%22%23grade-confirm-ui%22).remove())%2Cl.on(%22click%22%2C()%3D%3E%7B%24(%22%23grade-confirm-ui%22).remove()%2Ck(t%2Cr)%7D)%7D%2Ck%3D(t%2Cr)%3D%3E%7Blet%20d%3D0%2Co%3D0%3Br.forEach(s%3D%3E%7Btry%7Bconst%20a%3Ds.student%2Cl%3Ds.targetColumn%2Cn%3Ds.newValue%2Ce%3Dt.tbody.find(%60tr%5Bdata-uid%3D'%24%7Ba.uid%7D'%5D%60)%3Blet%20i%3De.find(%60td%5Bdata-field%3D'%24%7Bl%7D'%5D%60)%3Bif(i.length%3D%3D%3D0%26%26(i%3De.find(%22td%5Bdata-field%3D'%22%2Bl%2B%22_grade'%5D%22))%2Ci.length%3E0)%7Bt.editCell(i)%3Bconst%20g%3Di.find(%22input%22)%3Bg.length%3E0%3F(g.val(n)%2Cg.trigger(%22change%22)%2Cg.trigger(%22blur%22)%2Cd%2B%2B)%3A(console.warn(%60could%20not%20find%20input%20for%20%24%7Bs.name%7D%60)%2Co%2B%2B)%2Ct.closeCell()%7Delse%20o%2B%2B%7Dcatch(a)%7Bconsole.error(%60error%20processing%20%24%7Bs.name%7D%3A%20%60%2Ca)%2Co%2B%2B%7D%7D)%2Calert(%60Import%20fertiggestellt.%0AErfolgreiche%20Eintr%C3%A4ge%3A%20%24%7Bd%7D%0ANicht%20gefunden%2F%C3%9Cbersprungen%3A%20%24%7Bo%7D%60)%7D%7Dv()%7D)()%3B%0A" title="In die Lesezeichenleiste ziehen">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
             Noten importieren
           </a>
-          <span class="hint">↑ ziehen, nicht klicken</span>
         </div>
+        <p class="drag-hint">☝️ Diesen Button in die Lesezeichenleiste ziehen – nicht anklicken</p>
         <p class="click-note" hidden>
           Dieser Button funktioniert nur als Lesezeichen: mit der Maus gedrückt halten und
           in die Lesezeichenleiste ziehen. Danach im Intranet auf das Lesezeichen klicken.
         </p>
+        <details class="install">
+          <summary>Installieren</summary>
+          <p style="color:var(--muted); margin:6px 0 0;">
+            Lesezeichenleiste anzeigen mit <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>
+            (macOS: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>), dann den Button oben hineinziehen.
+          </p>
+
+          <figure class="figure">
+            <svg class="anim" viewBox="0 0 640 360" role="img" aria-labelledby="animTitle-intranet-noten-importierer animDesc-intranet-noten-importierer">
+              <title id="animTitle-intranet-noten-importierer">Animation: Button «Noten importieren» in die Lesezeichenleiste ziehen</title>
+              <desc id="animDesc-intranet-noten-importierer">Der Button «Noten importieren» wird mit der Maus aus der Seite nach oben in die Lesezeichenleiste des Browsers gezogen und erscheint dort als neues Lesezeichen.</desc>
+
+              <rect x="0" y="0" width="640" height="360" rx="12" fill="var(--bg)"/>
+
+              <!-- Browserfenster -->
+              <rect x="24" y="20" width="592" height="320" rx="12" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+
+              <!-- Tableiste -->
+              <path d="M24 32a12 12 0 0 1 12-12h568a12 12 0 0 1 12 12v24H24z" fill="var(--accent-soft)"/>
+              <circle cx="46" cy="38" r="4" fill="var(--border)"/>
+              <circle cx="60" cy="38" r="4" fill="var(--border)"/>
+              <circle cx="74" cy="38" r="4" fill="var(--border)"/>
+              <rect x="92" y="28" width="150" height="22" rx="6" fill="var(--surface)"/>
+              <rect x="104" y="36" width="94" height="6" rx="3" fill="var(--border)"/>
+
+              <!-- Adressleiste -->
+              <rect x="40" y="66" width="560" height="26" rx="13" fill="var(--bg)" stroke="var(--border)"/>
+              <rect x="56" y="76" width="210" height="6" rx="3" fill="var(--border)"/>
+
+              <!-- Lesezeichenleiste -->
+              <text x="40" y="112" font-family="system-ui, sans-serif" font-size="11" fill="var(--muted)">Lesezeichen</text>
+              <rect x="40" y="120" width="560" height="34" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-dasharray="4 4"/>
+              <g font-family="system-ui, sans-serif" font-size="11" fill="var(--muted)">
+                <rect x="50" y="128" width="74" height="18" rx="5" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="60" y="141">Intranet</text>
+                <rect x="132" y="128" width="62" height="18" rx="5" fill="var(--surface)" stroke="var(--border)"/>
+                <text x="142" y="141">Moodle</text>
+              </g>
+              <!-- neues Lesezeichen nach dem Drop -->
+              <g class="drop-in">
+                <rect x="202" y="126" width="131" height="22" rx="6" fill="var(--accent)"/>
+                <text x="214" y="141" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="var(--accent-ink)">Noten importieren</text>
+              </g>
+
+              <!-- Seiteninhalt -->
+              <g fill="var(--border)">
+                <rect x="56" y="186" width="230" height="9" rx="4.5"/>
+                <rect x="56" y="206" width="330" height="7" rx="3.5"/>
+                <rect x="56" y="222" width="286" height="7" rx="3.5"/>
+              </g>
+
+              <!-- Button auf der Seite (Quelle) -->
+              <g class="src-chip">
+                <rect x="56" y="256" width="152" height="34" rx="9" fill="var(--accent)"/>
+                <text x="74" y="278" font-family="system-ui, sans-serif" font-size="12.5" font-weight="600" fill="var(--accent-ink)">Noten importieren</text>
+              </g>
+
+              <!-- Maus + mitgezogene Kopie -->
+              <g class="drag-group">
+                <g class="ghost">
+                  <rect x="60" y="260" width="152" height="34" rx="9" fill="var(--accent)" opacity=".9"/>
+                  <text x="78" y="282" font-family="system-ui, sans-serif" font-size="12.5" font-weight="600" fill="var(--accent-ink)">Noten importieren</text>
+                </g>
+                <g transform="translate(118 268)">
+                  <path d="M0 0l0 19 4.6-4.6 3 7.2 3.6-1.6-3.1-7.1 6.4.3z"
+                        fill="var(--surface)" stroke="var(--text)" stroke-width="1.6" stroke-linejoin="round"/>
+                </g>
+              </g>
+            </svg>
+            <figcaption>
+              Gedrückt halten, nach oben in die Lesezeichenleiste ziehen, loslassen –
+              das Lesezeichen «Noten importieren» ist damit installiert.
+            </figcaption>
+          </figure>
+        </details>
       </div>
       <div class="card">
         <h2>Benutzen</h2>
@@ -235,85 +308,9 @@
     </section>
   </div>
 
-  <details class="install">
-    <summary>Installieren</summary>
-    <p style="color:var(--muted); margin:6px 0 0;">
-      Lesezeichenleiste anzeigen mit <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>
-      (macOS: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>), dann den Button oben hineinziehen.
-    </p>
-
-    <figure class="figure">
-      <svg class="anim" viewBox="0 0 640 360" role="img" aria-labelledby="animTitle animDesc">
-        <title id="animTitle">Animation: Button in die Lesezeichenleiste ziehen</title>
-        <desc id="animDesc">Der Button «Noten importieren» wird mit der Maus aus der Seite nach oben in die Lesezeichenleiste des Browsers gezogen und erscheint dort als neues Lesezeichen.</desc>
-
-        <rect x="0" y="0" width="640" height="360" rx="12" fill="var(--bg)"/>
-
-        <!-- Browserfenster -->
-        <rect x="24" y="20" width="592" height="320" rx="12" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
-
-        <!-- Tableiste -->
-        <path d="M24 32a12 12 0 0 1 12-12h568a12 12 0 0 1 12 12v24H24z" fill="var(--accent-soft)"/>
-        <circle cx="46" cy="38" r="4" fill="var(--border)"/>
-        <circle cx="60" cy="38" r="4" fill="var(--border)"/>
-        <circle cx="74" cy="38" r="4" fill="var(--border)"/>
-        <rect x="92" y="28" width="150" height="22" rx="6" fill="var(--surface)"/>
-        <rect x="104" y="36" width="94" height="6" rx="3" fill="var(--border)"/>
-
-        <!-- Adressleiste -->
-        <rect x="40" y="66" width="560" height="26" rx="13" fill="var(--bg)" stroke="var(--border)"/>
-        <rect x="56" y="76" width="210" height="6" rx="3" fill="var(--border)"/>
-
-        <!-- Lesezeichenleiste -->
-        <text x="40" y="112" font-family="system-ui, sans-serif" font-size="11" fill="var(--muted)">Lesezeichen</text>
-        <rect x="40" y="120" width="560" height="34" rx="8" fill="var(--bg)" stroke="var(--border)" stroke-dasharray="4 4"/>
-        <g font-family="system-ui, sans-serif" font-size="11" fill="var(--muted)">
-          <rect x="50" y="128" width="74" height="18" rx="5" fill="var(--surface)" stroke="var(--border)"/>
-          <text x="60" y="141">Intranet</text>
-          <rect x="132" y="128" width="62" height="18" rx="5" fill="var(--surface)" stroke="var(--border)"/>
-          <text x="142" y="141">Moodle</text>
-        </g>
-        <!-- neues Lesezeichen nach dem Drop -->
-        <g class="drop-in">
-          <rect x="202" y="126" width="128" height="22" rx="6" fill="var(--accent)"/>
-          <text x="214" y="141" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="var(--accent-ink)">Noten importieren</text>
-        </g>
-
-        <!-- Seiteninhalt -->
-        <g fill="var(--border)">
-          <rect x="56" y="186" width="230" height="9" rx="4.5"/>
-          <rect x="56" y="206" width="330" height="7" rx="3.5"/>
-          <rect x="56" y="222" width="286" height="7" rx="3.5"/>
-        </g>
-
-        <!-- Button auf der Seite (Quelle) -->
-        <g class="src-chip">
-          <rect x="56" y="256" width="150" height="34" rx="9" fill="var(--accent)"/>
-          <text x="74" y="278" font-family="system-ui, sans-serif" font-size="12.5" font-weight="600" fill="var(--accent-ink)">Noten importieren</text>
-        </g>
-
-        <!-- Maus + mitgezogene Kopie -->
-        <g class="drag-group">
-          <g class="ghost">
-            <rect x="60" y="260" width="150" height="34" rx="9" fill="var(--accent)" opacity=".9"/>
-            <text x="78" y="282" font-family="system-ui, sans-serif" font-size="12.5" font-weight="600" fill="var(--accent-ink)">Noten importieren</text>
-          </g>
-          <g transform="translate(118 268)">
-            <path d="M0 0l0 19 4.6-4.6 3 7.2 3.6-1.6-3.1-7.1 6.4.3z"
-                  fill="var(--surface)" stroke="var(--text)" stroke-width="1.6" stroke-linejoin="round"/>
-          </g>
-        </g>
-      </svg>
-      <figcaption>
-        Gedrückt halten, nach oben in die Lesezeichenleiste ziehen, loslassen –
-        das Lesezeichen «Noten importieren» ist damit installiert.
-      </figcaption>
-    </figure>
-  </details>
 
   <footer>
-    Version 1.0.0 · Stand 2026-11-01 · Commit <code>edf2125</code> ·
-    <a href="https://github.com/nmutsanas/kzn-tools/tree/main/bookmarklets">Quellcode</a>
+    Version 1.0.0 · Stand 2026-11-01 · Commit <code>49b81cd</code>
   </footer>
 
 </div>
