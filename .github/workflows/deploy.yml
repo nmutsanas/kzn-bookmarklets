@@ -1,0 +1,38 @@
+# Veröffentlicht den Inhalt dieses Repositories über GitHub Pages.
+# Die Dateien werden hier nicht von Hand gepflegt: sie kommen aus dem privaten
+# Repository nmutsanas/kzn-tools (Verzeichnis bookmarklets/), dessen Workflow die
+# Seite baut und per Deploy-Key hierher pusht.
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/configure-pages@v5
+
+      # .git und .github schliesst die Action selbst aus.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
