@@ -84,7 +84,7 @@
       }
     });
   }
-  const build = { "id": "moodle-switch", "name": "Moodle Switch", "variant": "tampermonkey", "commit": "c9644f8" };
+  const build = { "id": "moodle-switch", "name": "Moodle Switch", "variant": "tampermonkey", "commit": "cf76039" };
   logBuild(build);
   moodleSwitch(build);
 })();

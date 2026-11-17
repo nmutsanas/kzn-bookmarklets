@@ -279,7 +279,7 @@ Nicht gefunden/Übersprungen: ${notFoundCount}`
       }
     }, POLL_INTERVAL_MS);
   };
-  const build = { "id": "intranet-noten-importierer", "name": "Noten-Importierer", "variant": "tampermonkey", "commit": "c9644f8" };
+  const build = { "id": "intranet-noten-importierer", "name": "Noten-Importierer", "variant": "tampermonkey", "commit": "cf76039" };
   logBuild(build);
   installLauncher({ ...{ "id": "kzn-launcher-intranet-noten-importierer", "label": "Grade importer", "readySelector": "#gba-grid", "requiresJQuery": true }, build, run: openGradeImporter });
 })();

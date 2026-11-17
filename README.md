@@ -11,4 +11,4 @@ bekommen sind: im Quellrepository sind sie nicht eingecheckt.
 
 Seite: <https://nmutsanas.github.io/kzn-bookmarklets/>
 
-Stand: 2026-11-01 · Commit `c9644f8`
+Stand: 2026-11-17 · Commit `cf76039`

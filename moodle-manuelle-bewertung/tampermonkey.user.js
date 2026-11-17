@@ -120,7 +120,7 @@
     whenElement(CONTAINER_SELECTOR, addButton);
     if (build2.variant === "bookmarklet") report(formatResponses());
   }
-  const build = { "name": "Moodle Manuelle Bewertung", "variant": "tampermonkey", "commit": "c9644f8" };
+  const build = { "name": "Moodle Manuelle Bewertung", "variant": "tampermonkey", "commit": "cf76039" };
   logBuild(build);
   moodleManuelleBewertung(build);
 })();
